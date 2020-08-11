@@ -1,0 +1,5 @@
+owner: tttlonglonglong
+repo: electron-demo
+provider: github
+updaterCacheDirName: electron-cloud-doc-updater
+ 

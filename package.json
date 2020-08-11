@@ -1,9 +1,9 @@
 {
   "name": "electron-cloud-doc",
-  "version": "0.1.1",
+  "version": "0.0.1",
   "main": "main.js",
   "private": false,
-  "repository": ,
+  "repository": "https://github.com/tttlonglonglong/electron-demo.git",
   "description": "Electron praticeDemo",
   "author": {
     "name": "AZ·T",
@@ -22,7 +22,7 @@
     "dev": "concurrently \"wait-on http://localhost:3000 && electron .\" \"cross-env BROWSER=none npm start\"",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "release": "cross-env GH_TOKEN=1c879538397538e1aa7908188e000cddf8a0e418 electron-builder",
+    "release": "cross-env GH_TOKEN=1b3422161efbf01d15346d447b6b1be2b61737eb electron-builder",
     "prerelease": "npm run build && npm run buildMain",
     "prepack": "npm run build && npm run buildMain",
     "predist": "npm run build && npm run buildMain",
@@ -117,12 +117,16 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "axios": "^0.19.2",
     "classnames": "^2.2.6",
     "concurrently": "^5.2.0",
     "cross-env": "^7.0.2",
     "electron": "^9.0.5",
     "electron-builder": "^22.7.0",
+    "electron-is-dev": "^1.2.0",
+    "electron-updater": "^4.3.1",
     "node-sass": "^4.14.1",
+    "qiniu": "^7.3.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
@@ -130,9 +134,6 @@
     "typescript": "^3.9.6",
     "uuid": "^8.2.0",
     "wait-on": "^5.0.1",
-    "qiniu": "^7.3.2",
-    "axios": "^0.19.2",
-    "electron-is-dev": "^1.2.0",
     "webpack-cli": "^3.3.12"
   }
 }

@@ -1,5 +1,6 @@
 const { app, Menu, ipcMain, dialog } = require('electron')
 const isDev = require('electron-is-dev')
+const { autoUpdater } = require('electron-updater')
 const path = require('path')
 const menuTemplate = require('./src/menuTemplate')
 const AppWindow = require('./src/AppWindow')
@@ -9,6 +10,7 @@ const settingsStore = new Store({ name: 'Settings' })
 const fileStore = new Store({ name: 'Files Data' })
 let mainWindow, settingsWindow
 
+console.log('启动main.js')
 const createManager = () => {
   const accessKey = settingsStore.get('accessKey')
   const secretKey = settingsStore.get('secretKey')
@@ -16,7 +18,52 @@ const createManager = () => {
   return new QiniuManager(accessKey, secretKey, bucketName)
 }
 
+console.log('autoUpdater', autoUpdater.checkForUpdatesAndNotify)
 app.on('ready', () => {
+  if (isDev) {
+    autoUpdater.updateConfigPath = path.resolve(__dirname, './dev-app-update.yml')
+  }
+  // 不需要自动下载
+  autoUpdater.autoDownload = false
+  autoUpdater.checkForUpdatesAndNotify()
+  // autoUpdater.checkForUpdates()
+  // 只有运行了npm run 
+  autoUpdater.on("error", (error) => {
+    dialog.showErrorBox("Error:", error == null ? "unknow" : (error.status))
+  })
+  autoUpdater.on("checking-for-update", () => {
+    console.log("checking-for-update")
+  })
+  autoUpdater.on("update-available", () => {
+    dialog.showMessageBox({
+      type: "info",
+      title: "应用有新的版本",
+      message: '发现新版本，是否现在更新？',
+      buttons: ['是', '否'],
+    }, (buttonIndex) => {
+      if (buttonIndex === 0) {
+        autoUpdater.downloadUpdate()
+      }
+    })
+  })
+  autoUpdater.on("update-not-available", () => {
+    console.log('update-not-available')
+
+  })
+  autoUpdater.on("download-progress", (processObj) => {
+    let log_message = "Download speed: " + processObj.bytesPerSecond
+    log_message = log_message + " - Downloaded " + processObj.percent + '%'
+    log_message = log_message + " (" + processObj.transferred + ") " + processObj
+    console.log(log_message)
+  })
+  autoUpdater.on("update-downloaded", () => {
+    dialog.showMessageBox({
+      title: "安装更新",
+      message: '更新下载完毕，应用将重启并进行安装'
+    }, () => {
+      setImmediate(() => autoUpdater.quitAndInstall())
+    })
+  })
   const mainWindowConfig = {
     width: 1440,
     height: 768,
@@ -128,6 +175,8 @@ app.on('ready', () => {
     }
   })
 
-
-
+  process.on('uncaughtException', (error) => {
+    console.log('error:', error)
+    // logger.info('error:', error)
+  })
 })
