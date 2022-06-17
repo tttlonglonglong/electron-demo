@@ -121,7 +121,7 @@
     "classnames": "^2.2.6",
     "concurrently": "^5.2.0",
     "cross-env": "^7.0.2",
-    "electron": "^9.0.5",
+    "electron": "^15.5.5",
     "electron-builder": "^22.7.0",
     "electron-is-dev": "^1.2.0",
     "electron-updater": "^4.3.1",
